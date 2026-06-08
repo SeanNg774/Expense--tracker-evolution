@@ -1,21 +1,31 @@
 .wrapper {
-  padding: 1rem;
   border-radius: 0.8rem;
+  padding: 1rem;
 }
+
 form {
   display: flex;
   flex-direction: column;
 }
 
+form label,
+.radio-buttons p {
+  color: rgb(69, 61, 82);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0;
+}
+
 form button {
   background-color: rgb(143, 98, 202);
-  border-radius: 0.4rem;
   border: 1px solid rgb(143, 98, 202);
-  margin-top: 0.7rem;
-  font: inherit;
-  padding: 0.3rem;
+  border-radius: 0.45rem;
   color: rgb(255, 255, 255);
   cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  margin-top: 0.9rem;
+  padding: 0.55rem;
 }
 
 form button:hover,
@@ -23,23 +33,64 @@ form button:active {
   background-color: rgb(124, 66, 199);
 }
 
-input {
-  border-radius: 0.4rem;
+input,
+select {
   border: 1px solid rgba(197, 157, 250, 0.5);
-  padding: 0.3rem;
-  margin: 0.7rem 0;
+  border-radius: 0.45rem;
+  box-sizing: border-box;
+  color: rgb(45, 39, 56);
+  font: inherit;
+  margin: 0.45rem 0 0.8rem;
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+  width: 100%;
 }
 
-input:focus {
-  border-color: rgb(174, 120, 245);
+input:focus,
+select:focus {
+  border-color: rgb(143, 98, 202);
   outline: none;
 }
 
-.radio-buttons label {
-  margin-left: 1rem;
+.form-row {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .radio-buttons {
+  background-color: rgb(248, 246, 252);
+  border-radius: 0.65rem;
   display: flex;
   flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.75rem;
+}
+
+.type-options {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.type-options div {
+  align-items: center;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.type-options input {
+  margin: 0;
+  width: auto;
+}
+
+.type-options label {
+  font-weight: 500;
+}
+
+@media (max-width: 560px) {
+  .form-row,
+  .type-options {
+    grid-template-columns: 1fr;
+  }
 }
