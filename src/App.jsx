@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import classes from "./App.module.css";
 
@@ -38,18 +39,53 @@ function App() {
       return matchesSearch && matchesCategory;
     });
   }, [items, searchTerm, selectedCategory]);
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactions,
+} from "./services/transactionApi";
 
-  const onAddItemHandler = (enteredItems) => {
-    setItems((prevItems) => {
-      return [enteredItems, ...prevItems];
-    });
+function App() {
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadTransactions = async () => {
+      try {
+        const transactions = await getTransactions();
+        setItems(transactions);
+      } catch (requestError) {
+        setError(requestError.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTransactions();
+  }, []);
+
+  const onAddItemHandler = async (enteredItem) => {
+    setError("");
+
+    try {
+      const createdTransaction = await createTransaction(enteredItem);
+      setItems((prevItems) => [createdTransaction, ...prevItems]);
+    } catch (requestError) {
+      setError(requestError.message);
+      throw requestError;
+    }
   };
 
-  const deleteItemHandler = (id) => {
-    setItems((prevItems) => {
-      const updatedItems = prevItems.filter((item) => item.id !== id);
-      return updatedItems;
-    });
+  const deleteItemHandler = async (id) => {
+    setError("");
+
+    try {
+      await deleteTransaction(id);
+      setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
   const clearFiltersHandler = () => {
@@ -62,7 +98,9 @@ function App() {
       <Header items={items} />
       <Expense items={items} />
       <Section>History</Section>
-      {items.length === 0 && (
+      {isLoading && <p className={classes["no-history"]}>Loading...</p>}
+      {error && <p className={classes["no-history"]}>{error}</p>}
+      {!isLoading && !error && items.length === 0 && (
         <p className={classes["no-history"]}>
           No transaction found. Try adding one!
         </p>
