@@ -1,7 +1,15 @@
 const express = require("express");
 
+const {
+  getTransactions,
+  createTransaction,
+  deleteTransaction,
+} = require("../controllers/transactionController");
+
 const router = express.Router();
 
-// Transaction endpoints will be registered during the CRUD implementation step.
+router.get("/", getTransactions);
+router.post("/", createTransaction);
+router.delete("/:id", deleteTransaction);
 
 module.exports = router;
