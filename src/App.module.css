@@ -1,32 +1,20 @@
 html {
-  background-color: rgb(233, 227, 241);
-  color: rgb(45, 39, 56);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-  margin: 0;
+  font-family: sans-serif;
+  background-color: rgb(195, 177, 219);
 }
 
 .container {
-  animation: appear 0.7s ease-in forwards;
-  background-color: rgba(255, 255, 255, 0.96);
-  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.932);
+  width: 20rem;
+  max-width: 80%;
+  height: 100%;
   margin: 2rem auto;
-  max-width: 92%;
   padding: 1.5rem;
-  width: 34rem;
+  animation: appear 1s ease-in forwards;
 }
 
 .no-history {
-  background-color: rgb(248, 246, 252);
-  border: 1px dashed rgba(143, 98, 202, 0.32);
-  border-radius: 0.7rem;
-  color: rgb(93, 84, 106);
   font-size: 0.9rem;
-  margin: 0.75rem 0 1rem;
-  padding: 0.9rem;
-  text-align: center;
 }
 
 @keyframes appear {
