@@ -9,6 +9,7 @@ const ItemForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [isIncome, setIsIncome] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const titleHandler = (event) => {
     setEnteredTitle(event.target.value);
@@ -18,7 +19,7 @@ const ItemForm = (props) => {
     setEnteredAmount(event.target.value);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     if (
@@ -26,18 +27,24 @@ const ItemForm = (props) => {
       enteredAmount.trim() !== "" &&
       isIncome !== ""
     ) {
-      const items = {
-        id: Math.random().toString(),
+      const item = {
         title: enteredTitle,
         amount: +enteredAmount,
         income: isIncome,
       };
 
-      setEnteredTitle("");
-      setEnteredAmount("");
-      setIsIncome("");
+      setIsSubmitting(true);
 
-      props.onAddItem(items);
+      try {
+        await props.onAddItem(item);
+        setEnteredTitle("");
+        setEnteredAmount("");
+        setIsIncome("");
+      } catch {
+        // The parent displays API errors and preserves the entered values.
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -82,7 +89,9 @@ const ItemForm = (props) => {
             <label htmlFor="expense">Expense</label>
           </div>
         </div>
-        <button>Add transaction</button>
+        <button disabled={isSubmitting}>
+          {isSubmitting ? "Adding..." : "Add transaction"}
+        </button>
       </form>
     </Card>
   );
