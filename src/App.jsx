@@ -8,6 +8,10 @@ import Expense from "./components/expenses/Expense";
 import Section from "./components/UI/Section";
 import ItemList from "./components/items/ItemList";
 import ItemForm from "./components/items/ItemForm";
+
+// 1. Import your Auth component
+import Auth from "./components/auth/Auth";
+
 import {
   createTransaction,
   deleteTransaction,
@@ -15,11 +19,30 @@ import {
 } from "./services/transactionApi";
 
 function App() {
+  // 2. Add Authentication State
+  const [user, setUser] = useState(null);
+
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Check for existing login session on page refresh
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setUser({ username: "User" }); // Bypass login if token exists
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
+  // 3. ONLY fetch transactions IF a user is logged in
+  useEffect(() => {
+    if (!user) return; // Stop the code here if no user is authenticated
+
     const loadTransactions = async () => {
       try {
         const transactions = await getTransactions();
@@ -32,7 +55,7 @@ function App() {
     };
 
     loadTransactions();
-  }, []);
+  }, [user]); // The [user] dependency means this runs immediately after they log in!
 
   const onAddItemHandler = async (enteredItem) => {
     setError("");
@@ -57,22 +80,41 @@ function App() {
     }
   };
 
+  // 4. The Authentication Gatekeeper
+  if (!user) {
+    return <Auth onAuthSuccess={(userData) => setUser(userData)} />;
+  }
+
+  // 5. The Main Application View (Secured)
   return (
-    <Card className={classes.container}>
-      <Header items={items} />
-      <Expense items={items} />
-      <Section>History</Section>
-      {isLoading && <p className={classes["no-history"]}>Loading...</p>}
-      {error && <p className={classes["no-history"]}>{error}</p>}
-      {!isLoading && !error && items.length === 0 && (
-        <p className={classes["no-history"]}>
-          No transaction found. Try adding one!
-        </p>
-      )}
-      <ItemList onDeleteItem={deleteItemHandler} items={items} />
-      <Section>Add new transaction</Section>
-      <ItemForm onAddItem={onAddItemHandler} />
-    </Card>
+    <div style={{ paddingBottom: '20px' }}>
+      {/* Logout Header */}
+      <div style={{ textAlign: 'right', padding: '10px 20px' }}>
+        <span>Welcome, <strong>{user.username}</strong>! </span>
+        <button 
+          onClick={handleLogout} 
+          style={{ marginLeft: '10px', cursor: 'pointer', padding: '5px 10px' }}
+        >
+          Logout
+        </button>
+      </div>
+
+      <Card className={classes.container}>
+        <Header items={items} />
+        <Expense items={items} />
+        <Section>History</Section>
+        {isLoading && <p className={classes["no-history"]}>Loading...</p>}
+        {error && <p className={classes["no-history"]}>{error}</p>}
+        {!isLoading && !error && items.length === 0 && (
+          <p className={classes["no-history"]}>
+            No transaction found. Try adding one!
+          </p>
+        )}
+        <ItemList onDeleteItem={deleteItemHandler} items={items} />
+        <Section>Add new transaction</Section>
+        <ItemForm onAddItem={onAddItemHandler} />
+      </Card>
+    </div>
   );
 }
 
