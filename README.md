@@ -1,23 +1,24 @@
 # Expense Tracker
 
-This project is a simple expense tracker made with React and Vite.
+This project is a simple expense tracker made with React, currently hosted at https://gabrielliima.github.io/expense-tracker/.
+
+![app_image](https://user-images.githubusercontent.com/97259032/149417235-3b8f3f4b-a165-4dd9-bb8b-fb18d21d285f.png)
 
 ## How to use
 
-Use the form to add an income or expense transaction. Each transaction includes a title, amount, category, transaction type, and date. After a transaction is added, it appears in the history section and the income or expense totals are updated automatically.
+This is a basic react app that tracks expenses. All you have to do is <b>use the form</b> to insert an
+expense/income and it'll show up on the history.
 
-You can delete a transaction by selecting it in the history list and then clicking the delete button that appears.
+You can also <b>delete a transaction by clicking on it</b>, and then on the red button that appears.
 
 ## Data Management and UI Refinement
 
-The transaction history has been improved to make larger numbers of records easier to manage:
+- Transactions include category and date information that is saved through the persistence API.
+- The history can be searched by transaction title or category.
+- Category filtering and result counts make large transaction lists easier to manage.
+- The form and transaction cards use a responsive layout for desktop and mobile screens.
 
-- Transactions now store category and date information.
-- The history section includes a search field for finding transactions by title or category.
-- A category filter allows users to view only records from a selected category.
-- Filter result counts and empty-state messages provide clearer feedback when no records match the current search or filter.
-- The form and history list layout have been refined for a cleaner and more readable user interface.
-
+This project is still under development, and will be improved overtime. Contributions are always appreciated!
 ## License
 
 This project is Open Source and licensed under the MIT License
