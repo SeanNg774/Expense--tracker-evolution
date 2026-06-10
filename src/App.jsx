@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import classes from "./App.module.css";
 
@@ -8,6 +8,7 @@ import Expense from "./components/expenses/Expense";
 import Section from "./components/UI/Section";
 import ItemList from "./components/items/ItemList";
 import ItemForm from "./components/items/ItemForm";
+import TransactionControls from "./components/items/TransactionControls";
 
 // 1. Import your Auth component
 import Auth from "./components/auth/Auth";
@@ -18,11 +19,22 @@ import {
   getTransactions,
 } from "./services/transactionApi";
 
+const TRANSACTION_CATEGORIES = [
+  "Food",
+  "Transport",
+  "Bills",
+  "Shopping",
+  "Salary",
+  "Other",
+];
+
 function App() {
   // 2. Add Authentication State
   const [user, setUser] = useState(null);
 
   const [items, setItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -57,6 +69,22 @@ function App() {
     loadTransactions();
   }, [user]); // The [user] dependency means this runs immediately after they log in!
 
+  const filteredItems = useMemo(() => {
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+    return items.filter((item) => {
+      const category = item.category || "Other";
+      const matchesSearch =
+        normalizedSearchTerm === "" ||
+        item.title.toLowerCase().includes(normalizedSearchTerm) ||
+        category.toLowerCase().includes(normalizedSearchTerm);
+      const matchesCategory =
+        selectedCategory === "All" || category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [items, searchTerm, selectedCategory]);
+
   const onAddItemHandler = async (enteredItem) => {
     setError("");
 
@@ -80,6 +108,50 @@ function App() {
     }
   };
 
+  const clearFiltersHandler = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
+
+  return (
+    <Card className={classes.container}>
+      <Header items={items} />
+      <Expense items={items} />
+      <Section>History</Section>
+      {isLoading && <p className={classes["no-history"]}>Loading...</p>}
+      {error && <p className={classes["no-history"]}>{error}</p>}
+      {!isLoading && !error && items.length === 0 && (
+        <p className={classes["no-history"]}>
+          No transaction found. Try adding one!
+        </p>
+      )}
+      {!isLoading && items.length > 0 && (
+        <>
+          <TransactionControls
+            categories={TRANSACTION_CATEGORIES}
+            filteredCount={filteredItems.length}
+            onCategoryChange={setSelectedCategory}
+            onClearFilters={clearFiltersHandler}
+            onSearchChange={setSearchTerm}
+            searchTerm={searchTerm}
+            selectedCategory={selectedCategory}
+            totalItems={items.length}
+          />
+          {filteredItems.length === 0 ? (
+            <p className={classes["no-history"]}>
+              No transactions match the current search or category filter.
+            </p>
+          ) : (
+            <ItemList onDeleteItem={deleteItemHandler} items={filteredItems} />
+          )}
+        </>
+      )}
+      <Section>Add new transaction</Section>
+      <ItemForm
+        categories={TRANSACTION_CATEGORIES}
+        onAddItem={onAddItemHandler}
+      />
+    </Card>
   // 4. The Authentication Gatekeeper
   if (!user) {
     return <Auth onAuthSuccess={(userData) => setUser(userData)} />;

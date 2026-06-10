@@ -1,0 +1,52 @@
+.controls {
+  background-color: rgb(248, 246, 252);
+  border: 1px solid rgba(143, 98, 202, 0.16);
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+  margin: 0.75rem 0 1rem;
+  padding: 0.9rem;
+}
+
+.summary-row {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.summary-row span { color: rgb(84, 78, 94); font-size: 0.85rem; font-weight: 600; }
+
+.summary-row button {
+  background-color: transparent;
+  border: 1px solid rgba(143, 98, 202, 0.38);
+  border-radius: 0.4rem;
+  color: rgb(95, 58, 145);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.55rem;
+}
+
+.summary-row button:disabled { color: rgb(162, 154, 174); cursor: not-allowed; }
+
+.filter-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) 11rem;
+}
+
+.filter-grid div { display: flex; flex-direction: column; }
+.filter-grid label { color: rgb(69, 61, 82); font-size: 0.82rem; font-weight: 700; }
+
+.filter-grid input,
+.filter-grid select {
+  background-color: white;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .filter-grid { grid-template-columns: 1fr; }
+  .summary-row { align-items: flex-start; flex-direction: column; }
+}

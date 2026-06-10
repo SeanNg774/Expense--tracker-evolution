@@ -19,6 +19,16 @@ const transactionSchema = new mongoose.Schema(
       type: Boolean,
       required: [true, "Income is required"],
     },
+    category: {
+      type: String,
+      required: [true, "Category is required"],
+      trim: true,
+      enum: ["Food", "Transport", "Bills", "Shopping", "Salary", "Other"],
+    },
+    date: {
+      type: Date,
+      required: [true, "Date is required"],
+    },
   },
   {
     timestamps: true,
