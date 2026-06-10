@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
   {
+    // --- NEW SECURITY LINK ---
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    // -------------------------
     title: {
       type: String,
       required: [true, "Title is required"],

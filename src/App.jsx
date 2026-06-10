@@ -49,6 +49,9 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    setItems([]); // <-- ADD THIS LINE: It wipes the screen clean!
+    setSearchTerm(""); // Good practice: reset the search filter too
+    setSelectedCategory("All");
   };
 
   // 3. ONLY fetch transactions IF a user is logged in
@@ -67,7 +70,7 @@ function App() {
     };
 
     loadTransactions();
-  }, [user]); // The [user] dependency means this runs immediately after they log in!
+  }, [user]);
 
   const filteredItems = useMemo(() => {
     const normalizedSearchTerm = searchTerm.trim().toLowerCase();
@@ -113,51 +116,12 @@ function App() {
     setSelectedCategory("All");
   };
 
-  return (
-    <Card className={classes.container}>
-      <Header items={items} />
-      <Expense items={items} />
-      <Section>History</Section>
-      {isLoading && <p className={classes["no-history"]}>Loading...</p>}
-      {error && <p className={classes["no-history"]}>{error}</p>}
-      {!isLoading && !error && items.length === 0 && (
-        <p className={classes["no-history"]}>
-          No transaction found. Try adding one!
-        </p>
-      )}
-      {!isLoading && items.length > 0 && (
-        <>
-          <TransactionControls
-            categories={TRANSACTION_CATEGORIES}
-            filteredCount={filteredItems.length}
-            onCategoryChange={setSelectedCategory}
-            onClearFilters={clearFiltersHandler}
-            onSearchChange={setSearchTerm}
-            searchTerm={searchTerm}
-            selectedCategory={selectedCategory}
-            totalItems={items.length}
-          />
-          {filteredItems.length === 0 ? (
-            <p className={classes["no-history"]}>
-              No transactions match the current search or category filter.
-            </p>
-          ) : (
-            <ItemList onDeleteItem={deleteItemHandler} items={filteredItems} />
-          )}
-        </>
-      )}
-      <Section>Add new transaction</Section>
-      <ItemForm
-        categories={TRANSACTION_CATEGORIES}
-        onAddItem={onAddItemHandler}
-      />
-    </Card>
-  // 4. The Authentication Gatekeeper
+  // 4. The Authentication Gatekeeper (MUST BE BEFORE ANY OTHER RETURN)
   if (!user) {
     return <Auth onAuthSuccess={(userData) => setUser(userData)} />;
   }
 
-  // 5. The Main Application View (Secured)
+  // 5. The Main Application View (Secured + Search/Filter Included)
   return (
     <div style={{ paddingBottom: '20px' }}>
       {/* Logout Header */}
@@ -175,6 +139,7 @@ function App() {
         <Header items={items} />
         <Expense items={items} />
         <Section>History</Section>
+        
         {isLoading && <p className={classes["no-history"]}>Loading...</p>}
         {error && <p className={classes["no-history"]}>{error}</p>}
         {!isLoading && !error && items.length === 0 && (
@@ -182,9 +147,35 @@ function App() {
             No transaction found. Try adding one!
           </p>
         )}
-        <ItemList onDeleteItem={deleteItemHandler} items={items} />
+
+        {/* Search and Filtering Controls */}
+        {!isLoading && items.length > 0 && (
+          <>
+            <TransactionControls
+              categories={TRANSACTION_CATEGORIES}
+              filteredCount={filteredItems.length}
+              onCategoryChange={setSelectedCategory}
+              onClearFilters={clearFiltersHandler}
+              onSearchChange={setSearchTerm}
+              searchTerm={searchTerm}
+              selectedCategory={selectedCategory}
+              totalItems={items.length}
+            />
+            {filteredItems.length === 0 ? (
+              <p className={classes["no-history"]}>
+                No transactions match the current search or category filter.
+              </p>
+            ) : (
+              <ItemList onDeleteItem={deleteItemHandler} items={filteredItems} />
+            )}
+          </>
+        )}
+
         <Section>Add new transaction</Section>
-        <ItemForm onAddItem={onAddItemHandler} />
+        <ItemForm
+          categories={TRANSACTION_CATEGORIES}
+          onAddItem={onAddItemHandler}
+        />
       </Card>
     </div>
   );

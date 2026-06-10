@@ -72,7 +72,7 @@ const Auth = ({ onAuthSuccess }) => {
         </button>
       </form>
 
-      <p style={{ marginTop: '20px', textAlign: 'center' }}>
+      <p style={{ marginTop: '10px', textAlign: 'center' }}>
         {isLogin ? "Don't have an account? " : 'Already have an account? '}
         <span style={{ color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => { setIsLogin(!isLogin); setError(''); }}>
           {isLogin ? 'Register here' : 'Login here'}

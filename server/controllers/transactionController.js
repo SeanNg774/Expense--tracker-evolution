@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const Transaction = require("../models/Transaction");
 
 const sendServerError = (res) => {
@@ -8,7 +7,8 @@ const sendServerError = (res) => {
 
 const getTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.find().sort({ createdAt: -1 });
+    // SECURITY UPDATE: Only fetch transactions where the user matches the logged-in user
+    const transactions = await Transaction.find({ user: req.user.id }).sort({ createdAt: -1 });
 
     return res.status(200).json(transactions);
   } catch (error) {
@@ -55,6 +55,7 @@ const createTransaction = async (req, res) => {
 
   try {
     const transaction = await Transaction.create({
+      user: req.user.id, // SECURITY UPDATE: Link the new transaction to the user
       title: normalizedTitle,
       amount,
       income,
@@ -81,11 +82,20 @@ const deleteTransaction = async (req, res) => {
   }
 
   try {
-    const transaction = await Transaction.findByIdAndDelete(id);
+    // 1. First, find the transaction WITHOUT deleting it yet
+    const transaction = await Transaction.findById(id);
 
     if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
+
+    // 2. SECURITY UPDATE: Check if the logged-in user owns this specific transaction
+    if (transaction.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: "Not authorized to delete this transaction" });
+    }
+
+    // 3. If they own it, delete it
+    await transaction.deleteOne();
 
     return res.status(200).json(transaction);
   } catch (error) {
