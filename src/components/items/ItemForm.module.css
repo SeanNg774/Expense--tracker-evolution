@@ -1,12 +1,6 @@
-.wrapper {
-  border-radius: 0.8rem;
-  padding: 1rem;
-}
+.wrapper { border-radius: 0.8rem; padding: 1rem; }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
+form { display: flex; flex-direction: column; }
 
 form label,
 .radio-buttons p {
@@ -20,7 +14,7 @@ form button {
   background-color: rgb(143, 98, 202);
   border: 1px solid rgb(143, 98, 202);
   border-radius: 0.45rem;
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   font: inherit;
   font-weight: 700;
@@ -28,10 +22,8 @@ form button {
   padding: 0.55rem;
 }
 
-form button:hover,
-form button:active {
-  background-color: rgb(124, 66, 199);
-}
+form button:hover { background-color: rgb(124, 66, 199); }
+form button:disabled { cursor: wait; opacity: 0.7; }
 
 input,
 select {
@@ -47,10 +39,7 @@ select {
 }
 
 input:focus,
-select:focus {
-  border-color: rgb(143, 98, 202);
-  outline: none;
-}
+select:focus { border-color: rgb(143, 98, 202); outline: none; }
 
 .form-row {
   display: grid;
@@ -67,30 +56,12 @@ select:focus {
   padding: 0.75rem;
 }
 
-.type-options {
-  display: grid;
-  gap: 0.65rem;
-  grid-template-columns: 1fr 1fr;
-}
-
-.type-options div {
-  align-items: center;
-  display: flex;
-  gap: 0.45rem;
-}
-
-.type-options input {
-  margin: 0;
-  width: auto;
-}
-
-.type-options label {
-  font-weight: 500;
-}
+.type-options { display: grid; gap: 0.65rem; grid-template-columns: 1fr 1fr; }
+.type-options div { align-items: center; display: flex; gap: 0.45rem; }
+.type-options input { margin: 0; width: auto; }
+.type-options label { font-weight: 500; }
 
 @media (max-width: 560px) {
   .form-row,
-  .type-options {
-    grid-template-columns: 1fr;
-  }
+  .type-options { grid-template-columns: 1fr; }
 }
