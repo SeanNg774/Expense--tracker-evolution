@@ -1,6 +1,4 @@
-.item {
-  animation: appear 0.3s ease-in forwards;
-}
+.item { animation: appear 0.3s ease-in forwards; }
 
 .income,
 .expense {
@@ -14,17 +12,9 @@
   padding: 1rem;
 }
 
-.income {
-  border-right: 6px solid rgb(71, 184, 94);
-}
-
-.expense {
-  border-right: 6px solid rgb(225, 86, 86);
-}
-
-.details {
-  min-width: 0;
-}
+.income { border-right: 6px solid rgb(71, 184, 94); }
+.expense { border-right: 6px solid rgb(225, 86, 86); }
+.details { min-width: 0; }
 
 .title {
   color: rgb(45, 39, 56);
@@ -49,18 +39,9 @@
   padding: 0.18rem 0.45rem;
 }
 
-.amount {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.income .amount {
-  color: rgb(56, 156, 76);
-}
-
-.expense .amount {
-  color: rgb(205, 72, 72);
-}
+.amount { font-weight: 700; white-space: nowrap; }
+.income .amount { color: rgb(56, 156, 76); }
+.expense .amount { color: rgb(205, 72, 72); }
 
 .delete {
   align-items: center;
@@ -77,30 +58,15 @@
   width: 1.35rem;
 }
 
-.delete:hover {
-  background-color: rgb(205, 62, 62);
-}
+.delete:hover { background-color: rgb(205, 62, 62); }
 
 @keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(3rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(3rem); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 560px) {
   .income,
-  .expense {
-    align-items: flex-start;
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .delete {
-    grid-column: 2;
-  }
+  .expense { align-items: flex-start; grid-template-columns: minmax(0, 1fr) auto; }
+  .delete { grid-column: 2; }
 }
