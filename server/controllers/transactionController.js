@@ -18,7 +18,7 @@ const getTransactions = async (req, res) => {
 };
 
 const createTransaction = async (req, res) => {
-  const { title, amount, income } = req.body || {};
+  const { title, amount, income, category, date } = req.body || {};
   const normalizedTitle = typeof title === "string" ? title.trim() : "";
 
   if (!normalizedTitle) {
@@ -35,11 +35,31 @@ const createTransaction = async (req, res) => {
     return res.status(400).json({ message: "Income must be a boolean" });
   }
 
+  const allowedCategories = [
+    "Food",
+    "Transport",
+    "Bills",
+    "Shopping",
+    "Salary",
+    "Other",
+  ];
+
+  if (!allowedCategories.includes(category)) {
+    return res.status(400).json({ message: "A valid category is required" });
+  }
+
+  const transactionDate = new Date(date);
+  if (!date || Number.isNaN(transactionDate.getTime())) {
+    return res.status(400).json({ message: "A valid date is required" });
+  }
+
   try {
     const transaction = await Transaction.create({
       title: normalizedTitle,
       amount,
       income,
+      category,
+      date: transactionDate,
     });
 
     return res.status(201).json(transaction);
