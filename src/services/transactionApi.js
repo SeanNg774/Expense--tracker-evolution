@@ -1,32 +1,54 @@
-const API_BASE_URL = "http://localhost:5001/api";
+// Change this to match your actual backend URL/port if needed!
+const API_URL = "http://localhost:5001/api/transactions";
 
-const request = async (path, options = {}) => {
-  const response = await fetch(`${API_BASE_URL}${path}`, options);
-  const data = await response.json().catch(() => null);
+// Helper function to grab the token and format the headers securely
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}` // This is the digital "ID Card" we send to the database
+  };
+};
+
+export const getTransactions = async () => {
+  const response = await fetch(API_URL, {
+    method: "GET",
+    headers: getAuthHeaders(), // Attach the ID card
+  });
 
   if (!response.ok) {
-    throw new Error(data?.message || "Unable to complete the request");
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to fetch transactions");
   }
 
-  return data;
+  return response.json();
 };
 
-export const getTransactions = () => {
-  return request("/transactions");
-};
-
-export const createTransaction = (transactionData) => {
-  return request("/transactions", {
+export const createTransaction = async (transactionData) => {
+  const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(), // Attach the ID card
     body: JSON.stringify(transactionData),
   });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to create transaction");
+  }
+
+  return response.json();
 };
 
-export const deleteTransaction = (id) => {
-  return request(`/transactions/${id}`, {
+export const deleteTransaction = async (id) => {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(), // Attach the ID card
   });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to delete transaction");
+  }
+
+  return response.json();
 };
