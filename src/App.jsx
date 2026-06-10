@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import classes from "./App.module.css";
 
@@ -10,6 +9,11 @@ import Section from "./components/UI/Section";
 import ItemList from "./components/items/ItemList";
 import ItemForm from "./components/items/ItemForm";
 import TransactionControls from "./components/items/TransactionControls";
+import {
+  createTransaction,
+  deleteTransaction,
+  getTransactions,
+} from "./services/transactionApi";
 
 const TRANSACTION_CATEGORIES = [
   "Food",
@@ -24,29 +28,6 @@ function App() {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const filteredItems = useMemo(() => {
-    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-
-    return items.filter((item) => {
-      const matchesSearch =
-        normalizedSearchTerm === "" ||
-        item.title.toLowerCase().includes(normalizedSearchTerm) ||
-        item.category.toLowerCase().includes(normalizedSearchTerm);
-      const matchesCategory =
-        selectedCategory === "All" || item.category === selectedCategory;
-
-      return matchesSearch && matchesCategory;
-    });
-  }, [items, searchTerm, selectedCategory]);
-import {
-  createTransaction,
-  deleteTransaction,
-  getTransactions,
-} from "./services/transactionApi";
-
-function App() {
-  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -64,6 +45,22 @@ function App() {
 
     loadTransactions();
   }, []);
+
+  const filteredItems = useMemo(() => {
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+    return items.filter((item) => {
+      const category = item.category || "Other";
+      const matchesSearch =
+        normalizedSearchTerm === "" ||
+        item.title.toLowerCase().includes(normalizedSearchTerm) ||
+        category.toLowerCase().includes(normalizedSearchTerm);
+      const matchesCategory =
+        selectedCategory === "All" || category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [items, searchTerm, selectedCategory]);
 
   const onAddItemHandler = async (enteredItem) => {
     setError("");
@@ -105,7 +102,7 @@ function App() {
           No transaction found. Try adding one!
         </p>
       )}
-      {items.length > 0 && (
+      {!isLoading && items.length > 0 && (
         <>
           <TransactionControls
             categories={TRANSACTION_CATEGORIES}
