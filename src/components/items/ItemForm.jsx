@@ -4,47 +4,51 @@ import classes from "./ItemForm.module.css";
 
 import Card from "../UI/Card";
 
-// A form for entering the transactions
+const getToday = () => new Date().toISOString().slice(0, 10);
+
 const ItemForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
+  const [enteredCategory, setEnteredCategory] = useState(props.categories[0]);
+  const [enteredDate, setEnteredDate] = useState(getToday());
   const [isIncome, setIsIncome] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const titleHandler = (event) => {
-    setEnteredTitle(event.target.value);
-  };
-
-  const amountHandler = (event) => {
-    setEnteredAmount(event.target.value);
-  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
 
     if (
-      enteredTitle.trim() !== "" &&
-      enteredAmount.trim() !== "" &&
-      isIncome !== ""
+      enteredTitle.trim() === "" ||
+      enteredAmount.trim() === "" ||
+      +enteredAmount <= 0 ||
+      enteredCategory.trim() === "" ||
+      enteredDate.trim() === "" ||
+      isIncome === ""
     ) {
-      const item = {
-        title: enteredTitle,
-        amount: +enteredAmount,
-        income: isIncome,
-      };
+      return;
+    }
 
-      setIsSubmitting(true);
+    const item = {
+      title: enteredTitle.trim(),
+      amount: +enteredAmount,
+      income: isIncome,
+      category: enteredCategory,
+      date: enteredDate,
+    };
 
-      try {
-        await props.onAddItem(item);
-        setEnteredTitle("");
-        setEnteredAmount("");
-        setIsIncome("");
-      } catch {
-        // The parent displays API errors and preserves the entered values.
-      } finally {
-        setIsSubmitting(false);
-      }
+    setIsSubmitting(true);
+
+    try {
+      await props.onAddItem(item);
+      setEnteredTitle("");
+      setEnteredAmount("");
+      setEnteredCategory(props.categories[0]);
+      setEnteredDate(getToday());
+      setIsIncome("");
+    } catch {
+      // The parent displays API errors and preserves the entered values.
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -54,39 +58,69 @@ const ItemForm = (props) => {
         <label htmlFor="title">Title</label>
         <input
           id="title"
-          type="text"
+          onChange={(event) => setEnteredTitle(event.target.value)}
           placeholder="Enter title..."
+          type="text"
           value={enteredTitle}
-          onChange={titleHandler}
-        ></input>
+        />
         <label htmlFor="amount">Amount</label>
         <input
           id="amount"
-          type="number"
+          min="0.01"
+          onChange={(event) => setEnteredAmount(event.target.value)}
           placeholder="Enter amount..."
+          step="0.01"
+          type="number"
           value={enteredAmount}
-          onChange={amountHandler}
-        ></input>
-        <div className={classes["radio-buttons"]}>
+        />
+        <div className={classes["form-row"]}>
           <div>
-            <input
-              id="income"
-              type="radio"
-              name="item-type"
-              checked={isIncome === true}
-              onChange={() => setIsIncome(true)}
-            ></input>
-            <label htmlFor="income">Income</label>
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              onChange={(event) => setEnteredCategory(event.target.value)}
+              value={enteredCategory}
+            >
+              {props.categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
+            <label htmlFor="date">Date</label>
             <input
-              id="expense"
-              type="radio"
-              name="item-type"
-              checked={isIncome === false}
-              onChange={() => setIsIncome(false)}
-            ></input>
-            <label htmlFor="expense">Expense</label>
+              id="date"
+              onChange={(event) => setEnteredDate(event.target.value)}
+              type="date"
+              value={enteredDate}
+            />
+          </div>
+        </div>
+        <div className={classes["radio-buttons"]}>
+          <p>Transaction type</p>
+          <div className={classes["type-options"]}>
+            <div>
+              <input
+                checked={isIncome === true}
+                id="income"
+                name="item-type"
+                onChange={() => setIsIncome(true)}
+                type="radio"
+              />
+              <label htmlFor="income">Income</label>
+            </div>
+            <div>
+              <input
+                checked={isIncome === false}
+                id="expense"
+                name="item-type"
+                onChange={() => setIsIncome(false)}
+                type="radio"
+              />
+              <label htmlFor="expense">Expense</label>
+            </div>
           </div>
         </div>
         <button disabled={isSubmitting}>

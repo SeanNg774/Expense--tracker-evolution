@@ -11,6 +11,13 @@ expense/income and it'll show up on the history.
 
 You can also <b>delete a transaction by clicking on it</b>, and then on the red button that appears.
 
+## Data Management and UI Refinement
+
+- Transactions include category and date information that is saved through the persistence API.
+- The history can be searched by transaction title or category.
+- Category filtering and result counts make large transaction lists easier to manage.
+- The form and transaction cards use a responsive layout for desktop and mobile screens.
+
 This project is still under development, and will be improved overtime. Contributions are always appreciated!
 ## License
 

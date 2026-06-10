@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const transactionSchema = new mongoose.Schema(
   {
+    // --- NEW SECURITY LINK ---
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    // -------------------------
     title: {
       type: String,
       required: [true, "Title is required"],
@@ -18,6 +25,16 @@ const transactionSchema = new mongoose.Schema(
     income: {
       type: Boolean,
       required: [true, "Income is required"],
+    },
+    category: {
+      type: String,
+      required: [true, "Category is required"],
+      trim: true,
+      enum: ["Food", "Transport", "Bills", "Shopping", "Salary", "Other"],
+    },
+    date: {
+      type: Date,
+      required: [true, "Date is required"],
     },
   },
   {
