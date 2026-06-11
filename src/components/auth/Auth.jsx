@@ -48,7 +48,7 @@ const Auth = ({ onAuthSuccess }) => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <div style={{ maxWidth: '400px', margin: '50px auto', background: 'white' , padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
       <h2>{isLogin ? 'Login to Expense Tracker' : 'Create an Account'}</h2>
       {error && <div style={{ color: 'red', marginBottom: '15px' }}>{error}</div>}
       
@@ -60,7 +60,7 @@ const Auth = ({ onAuthSuccess }) => {
           </div>
         )}
         <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Email Address</label>
+          <label style={{ display: 'block', paddingTop: '20px', marginBottom: '5px' }}>Email Address</label>
           <input type="email" name="email" value={email} onChange={onChange} required style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
         </div>
         <div style={{ marginBottom: '15px' }}>

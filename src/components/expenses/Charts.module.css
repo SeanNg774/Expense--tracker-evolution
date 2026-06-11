@@ -1,0 +1,65 @@
+.row3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .card {
+    box-sizing: border-box;
+    overflow: hidden;
+    min-width: 0;
+  }
+  
+  .chartTitle {
+    font-size: 1.1rem;
+    border-bottom: 2px solid rgba(197, 157, 250, 0.5);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+    color: rgb(45, 39, 56);
+  }
+  
+  .monthSelector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .monthBtn {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    border: 1.5px solid rgba(197, 157, 250, 0.6);
+    background: rgb(248, 246, 252);
+    color: rgb(103, 96, 115);
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  
+  .monthBtn:hover {
+    background: rgba(197, 157, 250, 0.2);
+    color: rgb(45, 39, 56);
+  }
+  
+  .monthBtnActive {
+    background: rgba(167, 139, 250, 0.85);
+    color: white;
+    border-color: #a78bfa;
+    font-weight: 700;
+  }
+  
+  .pieWrapper {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+  
+  .noData {
+    text-align: center;
+    color: rgb(103, 96, 115);
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 1rem 0;
+  }
