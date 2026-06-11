@@ -1,35 +1,107 @@
-html {
-  background-color: rgb(233, 227, 241);
-  color: rgb(45, 39, 56);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: rgb(228, 219, 247);
+  min-height: 100%;
 }
 
-.container {
-  animation: appear 0.7s ease-in forwards;
-  background-color: rgba(255, 255, 255, 0.96);
-  box-sizing: border-box;
-  margin: 2rem auto;
-  max-width: 92%;
-  padding: 1.5rem;
-  width: 34rem;
+#root {
+  background-color: rgb(228, 219, 247);
+  min-height: 100vh;
 }
 
-.no-history {
-  background-color: rgb(248, 246, 252);
-  border: 1px dashed rgba(143, 98, 202, 0.32);
-  border-radius: 0.7rem;
-  color: rgb(93, 84, 106);
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
-  margin: 0.75rem 0 1rem;
-  padding: 0.9rem;
-  text-align: center;
+  color: rgb(45, 39, 56);
 }
 
-@keyframes appear {
-  from { opacity: 0; transform: translateY(3rem); }
-  to { opacity: 1; transform: translateY(0); }
+.logoutBtn {
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(197, 157, 250, 0.6);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: rgb(45, 39, 56);
+  cursor: pointer;
+}
+
+.logoutBtn:hover {
+  background: rgba(197, 157, 250, 0.2);
+}
+
+.mainBox {
+  background-color: rgba(255, 255, 255, 0.932);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+}
+
+.row1 {
+  margin-bottom: 1.5rem;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  align-items: stretch;
+}
+
+.innerCard {
+  background-color: rgb(252, 251, 252);
+  border-radius: 1rem;
+  border: 1px solid rgba(197, 157, 250, 0.3);
+  padding: 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 440px;
+}
+
+.innerCard section {
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-align: left;
+  border-bottom: 2px solid rgba(197, 157, 250, 0.5);
+  padding-bottom: 0.8rem;
+  margin: 0 0 1rem 0 !important;
+  color: rgb(45, 39, 56);
+}
+
+.innerCard > section,
+.innerCard section {
+  margin-top: 0 !important;
+}
+
+.historyBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.historyScroll {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: 4px;
+}
+
+.noHistory {
+  font-size: 0.9rem;
+  color: rgb(103, 96, 115);
 }
