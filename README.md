@@ -149,6 +149,41 @@ npm run build
 
 The generated output is written to the `dist` directory.
 
+## Testing
+
+This project utilizes **Jest** for automated testing, separated into two isolated suites to prevent environment conflicts between the React frontend and the Node.js backend. 
+
+### Frontend Testing
+The frontend test suite verifies the isolated data aggregation algorithms (Chart.js calculations) and dynamic search/filtering logic without needing to render the DOM or connect to a database.
+
+**To run the frontend tests:**
+1. Open your terminal in the **root** directory of the project.
+2. Ensure dependencies are installed (`npm install`).
+3. Run the following command:
+   ```bash
+   npm test
+
+### Backend Testing
+The backend test suite uses Supertest to simulate HTTP requests. It tests the complete data flow from the Express routers, through the authentication controllers, down to the MongoDB database.
+
+Prerequisites: Ensure your server/.env file contains a valid MONGO_URI .
+
+**To run the backend tests:**
+
+Open your terminal and navigate to the server directory:
+
+```bash
+cd server
+```
+Ensure backend dependencies are installed (`npm install`).
+
+Run the following command:
+
+```Bash
+npm test
+```
+
+
 ## License
 
 This project is open source and licensed under the MIT License.
