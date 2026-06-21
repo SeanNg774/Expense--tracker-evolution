@@ -1,28 +1,8 @@
 require("dotenv").config();
 
-const authRoutes = require("./routes/authRoutes");
-const express = require("express");
-const cors = require("cors");
-
+const app = require("./app");
 const connectDatabase = require("./config/database");
-const transactionRoutes = require("./routes/transactionRoutes");
-
-const app = express();
 const port = process.env.PORT || 5001;
-
-const corsOptions = process.env.CLIENT_ORIGIN
-  ? { origin: process.env.CLIENT_ORIGIN }
-  : {};
-
-app.use(cors(corsOptions));
-app.use(express.json());
-
-app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
-
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/auth", authRoutes);
 
 const startServer = async () => {
   try {
