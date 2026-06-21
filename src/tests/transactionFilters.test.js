@@ -1,4 +1,4 @@
-import { filterTransactions } from "./transactionFilters";
+import { filterTransactions } from "../utils/transactionFilters";
 
 const transactions = [
   { id: "1", title: "Lunch", amount: 12, category: "Food", income: false },
