@@ -1,6 +1,7 @@
+require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../server"); // Import your Express app
+const app = require("../app"); // Import your Express app
 const User = require("../models/User");
 
 // Run this before any tests start
@@ -9,12 +10,6 @@ beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI);
 });
 
-// Run this after all tests finish
-afterAll(async () => {
-  // Clean up the test user we are about to create so we can run the test again later
-  await User.deleteOne({ email: "testuser@example.com" });
-  await mongoose.connection.close();
-});
 
 describe("Authentication API Testing", () => {
   
@@ -111,4 +106,13 @@ describe("Authentication API Testing", () => {
     expect(res.statusCode).toBeGreaterThanOrEqual(400); 
     expect(res.body.message).toBe("Invalid email or password"); 
   });
+
+
+  afterAll(async () => {
+  
+  if (mongoose.connection.readyState === 1) { 
+    await User.deleteMany({ email: /@example\.com/ }); 
+    await mongoose.disconnect(); 
+  }
+});
 });
