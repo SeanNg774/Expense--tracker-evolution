@@ -9,6 +9,7 @@ import ItemForm from "./components/items/ItemForm";
 import TransactionControls from "./components/items/TransactionControls";
 import Charts from "./components/expenses/Charts";
 import Auth from "./components/auth/Auth";
+import { filterTransactions } from "./utils/transactionFilters";
 import {
   createTransaction,
   deleteTransaction,
@@ -63,17 +64,7 @@ function App() {
   }, [user]);
 
   const filteredItems = useMemo(() => {
-    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-    return items.filter((item) => {
-      const category = item.category || "Other";
-      const matchesSearch =
-        normalizedSearchTerm === "" ||
-        item.title.toLowerCase().includes(normalizedSearchTerm) ||
-        category.toLowerCase().includes(normalizedSearchTerm);
-      const matchesCategory =
-        selectedCategory === "All" || category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
+    return filterTransactions(items, searchTerm, selectedCategory);
   }, [items, searchTerm, selectedCategory]);
 
   const onAddItemHandler = async (enteredItem) => {
