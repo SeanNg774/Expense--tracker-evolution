@@ -166,7 +166,7 @@ The frontend test suite verifies the isolated data aggregation algorithms (Chart
 ### Backend Testing
 The backend test suite uses Supertest to simulate HTTP requests. It tests the complete data flow from the Express routers, through the authentication controllers, down to the MongoDB database.
 
-Prerequisites: Ensure your server/.env file contains a valid MONGO_URI .
+Prerequisites: Ensure your server/.env file contains a valid MONGO_URI and a JWT_SECRET string.
 
 **To run the backend tests:**
 
